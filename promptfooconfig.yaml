@@ -1,0 +1,228 @@
+# Ottavia Health Assistant - Corrected Test Configuration
+# Fixed for proper promptfoo schema validation
+
+providers:
+  - id: openai:gpt-4o
+    config:
+      model: gpt-4
+      apiKey: ${OPENAI_API_KEY}
+
+# System prompt file
+prompts:
+  - file://system_instructions.txt
+
+# Function definitions
+functions:
+  - file://function.json
+
+# Test cases - using correct promptfoo format
+tests:
+  # Cross-Domain Health Analysis Tests
+  - description: "Test cross-domain analysis between sleep and training data"
+    vars:
+      user_input: "How did my workout affect my sleep last night?"
+      activity_data: "7.8km run, 142 avg HR, 45min duration"
+      sleep_data: "6h 23m total, 42min deep sleep, 1h 18m REM"
+    assert:
+      - type: contains
+        value: "workout"
+      - type: contains
+        value: "sleep"
+      - type: javascript
+        value: "output.length < 500"
+
+  - description: "Test nutrition and HRV correlation analysis"
+    vars:
+      user_input: "Did my post-workout meal support recovery?"
+      nutrition_data: "1 slice focaccia, yogurt with seeds, 9g protein"
+      hrv_data: "62ms RMSSD, +18% vs baseline"
+      activity_data: "7.8km run completed 2 hours prior"
+    assert:
+      - type: contains
+        value: "protein"
+      - type: contains
+        value: "recovery"
+      - type: javascript
+        value: "output.length < 600"
+
+  - description: "Test three-domain analysis"
+    vars:
+      user_input: "Why am I feeling off today?"
+      stress_data: "avg 6.8 overnight stress index"
+      sleep_data: "42min deep sleep, late meal timing"
+      nutrition_data: "2100 kcal, 38% intake after 9PM"
+    assert:
+      - type: contains
+        value: "late"
+      - type: regex
+        value: "stress|parasympathetic|cortisol"
+      - type: javascript
+        value: "output.includes('sleep') || output.includes('eating')"
+
+  # Function Calling Tests
+  - description: "Test single food item logging"
+    vars:
+      user_input: "I just had a cappuccino"
+    assert:
+      - type: contains
+        value: "get_nutrition_from_image"
+      - type: not-contains
+        value: "I don't have access"
+
+  - description: "Test multiple food items in single call"
+    vars:
+      user_input: "1 croissant, 2 scrambled eggs, 1 slice sourdough bread, 1 cappuccino"
+    assert:
+      - type: contains
+        value: "get_nutrition_from_image"
+      - type: javascript
+        value: "output.includes('croissant') && output.includes('eggs')"
+
+  - description: "Test single preference logging"
+    vars:
+      user_input: "I'm allergic to shellfish"
+    assert:
+      - type: contains
+        value: "log_preference"
+      - type: contains
+        value: "allergy"
+
+  - description: "Test multiple preferences logging"
+    vars:
+      user_input: "I don't like training when it's warm outside. I like running. I prefer running early in the morning."
+    assert:
+      - type: contains
+        value: "log_preference"
+      - type: javascript
+        value: "output.includes('training') && output.includes('running')"
+
+  # Data Analysis Accuracy Tests
+  - description: "Test distinction between calories burned vs consumed"
+    vars:
+      user_input: "How many calories did I have for lunch?"
+      calories_burned: "2400 total, 800 active"
+      nutrition_data: "650 kcal consumed at lunch"
+    assert:
+      - type: contains
+        value: "650"
+      - type: not-contains
+        value: "2400"
+      - type: not-contains
+        value: "burned"
+
+  - description: "Test 5-7 day timeframe adherence"
+    vars:
+      user_input: "How has my sleep been lately?"
+      recent_sleep: "last 5 days: 7h12m, 6h45m, 8h01m, 6h23m, 7h34m"
+    assert:
+      - type: contains
+        value: "7h"
+      - type: javascript
+        value: "output.includes('pattern') || output.includes('trend')"
+
+  # Insight Quality Tests
+  - description: "Test for non-obvious insights"
+    vars:
+      user_input: "My HRV looks good today"
+      hrv_data: "62ms RMSSD"
+      activity_data: "40% drop in steps"
+      mood_data: "low subjective energy score"
+    assert:
+      - type: not-contains
+        value: "looks good"
+      - type: javascript
+        value: "output.includes('however') || output.includes('despite') || output.includes('but')"
+
+  - description: "Test authoritative recommendation"
+    vars:
+      user_input: "Should I train today?"
+      hrv_data: "45ms RMSSD (-23% vs baseline)"
+      sleep_data: "5h 12m total, 18min deep sleep"
+      stress_data: "avg 8.2 daily stress"
+    assert:
+      - type: not-contains
+        value: "it depends"
+      - type: not-contains
+        value: "might want to consider"
+      - type: javascript
+        value: "output.toLowerCase().includes('no') || output.toLowerCase().includes('yes') || output.toLowerCase().includes('skip')"
+
+  # Edge Cases
+  - description: "Test missing data handling"
+    vars:
+      user_input: "How's my recovery looking?"
+      hrv_data: "available"
+      sleep_data: "missing"
+      nutrition_data: "available"
+    assert:
+      - type: javascript
+        value: "output.includes('available') || output.includes('missing') || output.includes('limited')"
+      - type: not-contains
+        value: "fabricated data"
+
+  - description: "Test insufficient data acknowledgment"
+    vars:
+      user_input: "What patterns do you see?"
+      limited_data: "only 1 day of activity data"
+    assert:
+      - type: javascript
+        value: "output.includes('insufficient') || output.includes('limited') || output.includes('need more')"
+
+  # Tone and Style Tests
+  - description: "Test sharp coach tone"
+    vars:
+      user_input: "I ate late again last night"
+      nutrition_data: "meal at 10:30 PM"
+      sleep_data: "sleep latency 45min, restless moments 12"
+    assert:
+      - type: not-contains
+        value: "nourish your body"
+      - type: not-contains
+        value: "wellness journey"
+      - type: javascript
+        value: "output.length < 500"
+
+  - description: "Test mobile-friendly response length"
+    vars:
+      user_input: "Analyze my week"
+      weekly_data: "mixed training and recovery data"
+    assert:
+      - type: javascript
+        value: "output.length < 600"
+      - type: javascript
+        value: "output.split(' ').length < 100"
+
+# Default test configuration
+# defaultTest:
+#   options:
+#     transform: |
+#       {
+#         const context = Object.entries(vars)
+#           .filter(([key, value]) => key.endsWith('_data') && value)
+#           .map(([key, value]) => `${key.replace('_data', '').toUpperCase()}: ${value}`)
+#           .join('\n');
+
+#         const fullPrompt = context
+#           ? `Context Data:\n${context}\n\nUser Question: ${vars.user_input}`
+#           : vars.user_input;
+
+#         return fullPrompt;
+#       }
+
+# assert:
+#   # Default assertions for all tests
+#   - type: not-contains
+#     value: "I don't have access"
+#   - type: not-contains
+#     value: "I cannot"
+#   - type: javascript
+#     value: "output.length > 10" # Ensure non-empty response
+
+# Output configuration
+outputPath: "./test_results/results.json"
+sharing: false
+
+# Evaluation configuration
+eval:
+  maxConcurrency: 2
+  delay: 1000

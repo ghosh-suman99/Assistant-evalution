@@ -1,0 +1,39 @@
+{
+  "name": "ottavia-evaluator",
+  "version": "1.0.0",
+  "description": "Evaluation framework for Ottavia health assistant",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "evaluate": "node src/evaluator.js",
+    "mock-data": "node -e \"import('./src/mock-data-generator.js').then(m => new m.default().generateMockData())\"",
+    "dev": "node --watch src/index.js",
+    "test": "node --test src/__tests__/*.test.js",
+    "test:runner": "node src/test-runner.js",
+    "eval-and-view": "dotenv -e .env -- promptfoo eval && promptfoo view"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "dotenv": "^16.3.1",
+    "fs-extra": "^11.1.1",
+    "inquirer": "^9.2.11",
+    "openai": "^4.20.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.0",
+    "cross-env": "^7.0.3",
+    "dotenv-cli": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "promptfoo",
+    "openai",
+    "assistant",
+    "evaluation",
+    "health",
+    "testing"
+  ]
+}

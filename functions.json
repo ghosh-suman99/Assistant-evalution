@@ -1,0 +1,620 @@
+[
+  {
+    "name": "get_nutrition_from_image",
+    "description": "Retrieve nutritional values or calorie content from a food image. Also before calling the function ask for detect the food item and ask for quantity or servingSize consumed",
+    "strict": true,
+    "parameters": {
+      "type": "object",
+      "required": [
+        "date",
+        "time",
+        "food_item",
+        "ServingSize",
+        "Macronutrients",
+        "Micronutrients",
+        "FunctionalCompound",
+        "AminoAcids",
+        "FattyAcid",
+        "Sweetener",
+        "AdditivesAndOthers"
+      ],
+      "properties": {
+        "date": {
+          "type": "string",
+          "description": "The current date at the time of user's nutrition request (auto-generated)"
+        },
+        "time": {
+          "type": "string",
+          "description": "The current date at the time of user's nutrition request (auto-generated)"
+        },
+        "food_item": {
+          "type": "string",
+          "description": "The name of the food item."
+        },
+        "ServingSize": {
+          "type": "string",
+          "description": "ServingSize of the food item consumed (e.g., 2 slices, 1 cup)."
+        },
+        "Macronutrients": {
+          "type": "object",
+          "required": [
+            "protein",
+            "total_fat",
+            "saturated_fat",
+            "monounsaturated_fat",
+            "polyunsaturated_fat",
+            "trans_fat",
+            "cholesterol",
+            "carbohydrates",
+            "dietary_sugar",
+            "fiber",
+            "dietary_energy",
+            "sugars",
+            "sugar_alcohols",
+            "added_sugars",
+            "fiber_detail",
+            "alcohol",
+            "water",
+            "energy",
+            "starch",
+            "digestible_carbohydrates",
+            "resistant_starch",
+            "glycemic_load"
+          ],
+          "properties": {
+            "protein": {
+              "type": "number",
+              "description": "Essential macronutrient required for building and repairing tissues (g)."
+            },
+            "total_fat": {
+              "type": "number",
+              "description": "Total amount of fat including all types (g)."
+            },
+            "saturated_fat": {
+              "type": "number",
+              "description": "Type of fat commonly found in animal products; associated with higher LDL cholesterol (g)."
+            },
+            "monounsaturated_fat": {
+              "type": "number",
+              "description": "Heart-healthy fats found in olive oil, avocados, and nuts (g)."
+            },
+            "polyunsaturated_fat": {
+              "type": "number",
+              "description": "Fats that include omega-3 and omega-6 fatty acids; beneficial for heart health (g)."
+            },
+            "trans_fat": {
+              "type": "number",
+              "description": "Artificial or naturally occurring fat linked to increased heart disease risk (g)."
+            },
+            "cholesterol": {
+              "type": "number",
+              "description": "Waxy substance used in hormone and cell membrane production (mg)."
+            },
+            "carbohydrates": {
+              "type": "number",
+              "description": "Total carbohydrates including sugars, starches, and fibers (g)."
+            },
+            "dietary_sugar": {
+              "type": "number",
+              "description": "Total amount of naturally occurring and added sugars in the diet (g)."
+            },
+            "fiber": {
+              "type": "number",
+              "description": "Indigestible carbohydrate that promotes digestive health (g)."
+            },
+            "dietary_energy": {
+              "type": "number",
+              "description": "Total caloric value derived from food (kcal)."
+            },
+            "sugars": {
+              "type": "number",
+              "description": "All sugars including natural and added, synonymous with dietary_sugar in some contexts (g)."
+            },
+            "sugar_alcohols": {
+              "type": "number",
+              "description": "Low-calorie sweeteners such as xylitol, erythritol, and sorbitol (g)."
+            },
+            "added_sugars": {
+              "type": "number",
+              "description": "Sugars added during processing or preparation (g)."
+            },
+            "fiber_detail": {
+              "type": "number",
+              "description": "Detailed breakdown of fiber types, may include soluble and insoluble fiber (g)."
+            },
+            "alcohol": {
+              "type": "number",
+              "description": "Ethanol content contributing to caloric intake (g)."
+            },
+            "water": {
+              "type": "number",
+              "description": "Total moisture content in the food (g)."
+            },
+            "energy": {
+              "type": "number",
+              "description": "Energy content expressed in kilojoules (kJ) or kilocalories (kcal)."
+            },
+            "starch": {
+              "type": "number",
+              "description": "Complex carbohydrate made of glucose units; provides sustained energy (g)."
+            },
+            "digestible_carbohydrates": {
+              "type": "number",
+              "description": "Carbohydrates that are absorbed and contribute to blood glucose levels (g)."
+            },
+            "resistant_starch": {
+              "type": "number",
+              "description": "Type of starch not digested in the small intestine, acts like fiber (g)."
+            },
+            "glycemic_load": {
+              "type": "number",
+              "description": "Estimate of how much a food will raise a person’s blood glucose level per serving (unitless)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "Micronutrients": {
+          "type": "object",
+          "required": [
+            "beta_carotene",
+            "vitamin_a",
+            "vitamin_b1",
+            "vitamin_b2",
+            "vitamin_b3",
+            "vitamin_b5",
+            "vitamin_b6",
+            "vitamin_b7",
+            "vitamin_b9",
+            "vitamin_b12",
+            "vitamin_c",
+            "vitamin_d",
+            "vitamin_e",
+            "vitamin_k",
+            "calcium",
+            "iron",
+            "magnesium",
+            "phosphorus",
+            "potassium",
+            "sodium",
+            "zinc",
+            "copper",
+            "manganese",
+            "selenium",
+            "chromium",
+            "molybdenum",
+            "iodine"
+          ],
+          "properties": {
+            "beta_carotene": {
+              "type": "number",
+              "description": "A precursor to vitamin A with antioxidant properties that support vision and immune function (mcg)."
+            },
+            "vitamin_a": {
+              "type": "number",
+              "description": "Essential for vision, immune defense, and cellular communication (mcg RAE)."
+            },
+            "vitamin_b1": {
+              "type": "number",
+              "description": "Also known as thiamine, supports energy metabolism and nervous system function (mg)."
+            },
+            "vitamin_b2": {
+              "type": "number",
+              "description": "Also known as riboflavin, involved in energy production and cellular function (mg)."
+            },
+            "vitamin_b3": {
+              "type": "number",
+              "description": "Also known as niacin, aids metabolism and supports skin and nervous system health (mg NE)."
+            },
+            "vitamin_b5": {
+              "type": "number",
+              "description": "Also known as pantothenic acid, essential for synthesizing coenzyme A and metabolizing fats (mg)."
+            },
+            "vitamin_b6": {
+              "type": "number",
+              "description": "Plays a role in amino acid metabolism and neurotransmitter synthesis (mg)."
+            },
+            "vitamin_b7": {
+              "type": "number",
+              "description": "Also known as biotin, supports metabolism of fats, carbohydrates, and proteins (mcg)."
+            },
+            "vitamin_b9": {
+              "type": "number",
+              "description": "Also known as folate, critical for DNA synthesis and red blood cell formation (mcg DFE)."
+            },
+            "vitamin_b12": {
+              "type": "number",
+              "description": "Necessary for red blood cell formation, neurological function, and DNA synthesis (mcg)."
+            },
+            "vitamin_c": {
+              "type": "number",
+              "description": "An antioxidant vitamin important for collagen synthesis, immune function, and iron absorption (mg)."
+            },
+            "vitamin_d": {
+              "type": "number",
+              "description": "Regulates calcium and phosphate metabolism, supporting bone and immune health (mcg)."
+            },
+            "vitamin_e": {
+              "type": "number",
+              "description": "A fat-soluble antioxidant that protects cell membranes from oxidative damage (mg alpha-tocopherol)."
+            },
+            "vitamin_k": {
+              "type": "number",
+              "description": "Important for blood clotting and bone metabolism (mcg)."
+            },
+            "calcium": {
+              "type": "number",
+              "description": "Essential for bone and teeth structure, muscle function, and nerve signaling (mg)."
+            },
+            "iron": {
+              "type": "number",
+              "description": "Required for oxygen transport in the blood and energy metabolism (mg)."
+            },
+            "magnesium": {
+              "type": "number",
+              "description": "Supports muscle and nerve function, blood glucose control, and bone health (mg)."
+            },
+            "phosphorus": {
+              "type": "number",
+              "description": "Works with calcium to build bones and teeth and is involved in energy production (mg)."
+            },
+            "potassium": {
+              "type": "number",
+              "description": "Helps regulate fluid balance, nerve signals, and muscle contractions (mg)."
+            },
+            "sodium": {
+              "type": "number",
+              "description": "Essential for fluid balance, nerve transmission, and muscle contraction (mg)."
+            },
+            "zinc": {
+              "type": "number",
+              "description": "Involved in immune function, wound healing, DNA synthesis, and cell division (mg)."
+            },
+            "copper": {
+              "type": "number",
+              "description": "Supports iron metabolism, immune function, and the formation of connective tissue (mg)."
+            },
+            "manganese": {
+              "type": "number",
+              "description": "Involved in bone formation, blood clotting, and reducing oxidative stress (mg)."
+            },
+            "selenium": {
+              "type": "number",
+              "description": "A trace mineral important for reproduction, thyroid function, and protecting from oxidative damage (mcg)."
+            },
+            "chromium": {
+              "type": "number",
+              "description": "Plays a role in the metabolism of carbohydrates, fats, and insulin action (mcg)."
+            },
+            "molybdenum": {
+              "type": "number",
+              "description": "Helps enzymes break down amino acids and drugs in the body (mcg)."
+            },
+            "iodine": {
+              "type": "number",
+              "description": "Essential for the production of thyroid hormones which regulate metabolism (mcg)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "FunctionalCompound": {
+          "type": "object",
+          "required": [
+            "omega-3_fatty_acids",
+            "omega-6_fatty_acids",
+            "choline",
+            "collagen",
+            "caffeine",
+            "lutein",
+            "zeaxanthin",
+            "l-Carnitine",
+            "taurine",
+            "creatine",
+            "coQ10"
+          ],
+          "properties": {
+            "omega-3_fatty_acids": {
+              "type": "number",
+              "description": "Essential polyunsaturated fats (including DHA and EPA) that support brain, heart, and anti-inflammatory health (mg)."
+            },
+            "omega-6_fatty_acids": {
+              "type": "number",
+              "description": "Essential fatty acids that support skin and hair growth, bone health, and metabolic regulation (mg)."
+            },
+            "choline": {
+              "type": "number",
+              "description": "A nutrient important for liver function, brain development, and neurotransmitter synthesis (mg)."
+            },
+            "collagen": {
+              "type": "number",
+              "description": "A structural protein essential for skin, joint, and connective tissue health (mg)."
+            },
+            "caffeine": {
+              "type": "number",
+              "description": "A natural stimulant that affects the central nervous system to reduce fatigue and improve focus (mg)."
+            },
+            "lutein": {
+              "type": "number",
+              "description": "An antioxidant carotenoid that supports eye health and protects against age-related macular degeneration (mg)."
+            },
+            "zeaxanthin": {
+              "type": "number",
+              "description": "A carotenoid concentrated in the retina that supports visual performance and eye protection (mg)."
+            },
+            "l-Carnitine": {
+              "type": "number",
+              "description": "A compound involved in energy production through the transport of fatty acids into mitochondria (mg)."
+            },
+            "taurine": {
+              "type": "number",
+              "description": "An amino sulfonic acid important for cardiovascular function, development, and electrolyte balance (mg)."
+            },
+            "creatine": {
+              "type": "number",
+              "description": "A compound that enhances muscle performance by aiding in ATP regeneration during high-intensity exercise (mg)."
+            },
+            "coQ10": {
+              "type": "number",
+              "description": "An antioxidant that supports mitochondrial energy production and cardiovascular health (mg)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "AminoAcids": {
+          "type": "object",
+          "required": [
+            "arginine",
+            "isoleucine",
+            "leucine",
+            "lysine",
+            "methionine",
+            "phenylalanine",
+            "tryptophan",
+            "valine"
+          ],
+          "properties": {
+            "arginine": {
+              "type": "number",
+              "description": "A semi-essential amino acid involved in nitric oxide production, immune function, and wound healing (mg)."
+            },
+            "isoleucine": {
+              "type": "number",
+              "description": "A branched-chain amino acid (BCAA) that supports muscle metabolism and immune function (mg)."
+            },
+            "leucine": {
+              "type": "number",
+              "description": "A BCAA essential for muscle protein synthesis, tissue repair, and energy regulation (mg)."
+            },
+            "lysine": {
+              "type": "number",
+              "description": "Essential for protein synthesis, hormone production, and calcium absorption (mg)."
+            },
+            "methionine": {
+              "type": "number",
+              "description": "A sulfur-containing amino acid important for detoxification and as a precursor to cysteine (mg)."
+            },
+            "phenylalanine": {
+              "type": "number",
+              "description": "A precursor to neurotransmitters like dopamine and norepinephrine; vital for brain function (mg)."
+            },
+            "tryptophan": {
+              "type": "number",
+              "description": "A precursor to serotonin and melatonin; supports mood regulation and sleep (mg)."
+            },
+            "valine": {
+              "type": "number",
+              "description": "A BCAA that supports muscle tissue repair, energy production, and mental focus (mg)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "FattyAcid": {
+          "type": "object",
+          "required": [
+            "docosahexaenoic_acid",
+            "eicosapentaenoic_acid",
+            "alpha-linolenic_acid",
+            "linoleic_acid",
+            "oleic_acid"
+          ],
+          "properties": {
+            "docosahexaenoic_acid": {
+              "type": "number",
+              "description": "DHA – an omega-3 fatty acid essential for brain and eye development, commonly found in fish oil (mg)."
+            },
+            "eicosapentaenoic_acid": {
+              "type": "number",
+              "description": "EPA – an omega-3 fatty acid with anti-inflammatory effects, often sourced from fatty fish (mg)."
+            },
+            "alpha-linolenic_acid": {
+              "type": "number",
+              "description": "ALA – a plant-based omega-3 fatty acid found in flaxseed, chia seeds, and walnuts; precursor to DHA/EPA (mg)."
+            },
+            "linoleic_acid": {
+              "type": "number",
+              "description": "An omega-6 essential fatty acid involved in cell membrane integrity and inflammatory response (mg)."
+            },
+            "oleic_acid": {
+              "type": "number",
+              "description": "A monounsaturated omega-9 fatty acid found in olive oil, associated with heart health benefits (mg)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "Sweetener": {
+          "type": "object",
+          "required": [
+            "aspartame",
+            "aucralose",
+            "saccharin",
+            "steviol_glycosides",
+            "xylitol",
+            "sorbitol",
+            "mannitol",
+            "erythritol",
+            "monk_fruit_extract",
+            "allulose",
+            "maltitol"
+          ],
+          "properties": {
+            "aspartame": {
+              "type": "number",
+              "description": "A low-calorie artificial sweetener commonly used in diet beverages and sugar-free products (mg)."
+            },
+            "aucralose": {
+              "type": "number",
+              "description": "Likely a typo — assuming this refers to 'sucralose', an artificial sweetener used in baked goods and diet sodas (mg)."
+            },
+            "saccharin": {
+              "type": "number",
+              "description": "One of the oldest artificial sweeteners, often used in tabletop sweeteners and processed foods (mg)."
+            },
+            "steviol_glycosides": {
+              "type": "number",
+              "description": "Natural sweet compounds extracted from the stevia plant, used as a sugar substitute (mg)."
+            },
+            "xylitol": {
+              "type": "number",
+              "description": "A sugar alcohol found in many sugar-free gums and candies; has a cooling effect and can improve dental health (mg)."
+            },
+            "sorbitol": {
+              "type": "number",
+              "description": "A sugar alcohol with laxative effects at high doses, commonly used in sugar-free foods (mg)."
+            },
+            "mannitol": {
+              "type": "number",
+              "description": "A sugar alcohol used as a low-calorie sweetener and sometimes in medical settings for diuresis (mg)."
+            },
+            "erythritol": {
+              "type": "number",
+              "description": "A low-calorie sugar alcohol with minimal impact on blood sugar, often used in keto and diabetic-friendly foods (mg)."
+            },
+            "monk_fruit_extract": {
+              "type": "number",
+              "description": "A natural sweetener derived from monk fruit, providing intense sweetness with no calories (mg)."
+            },
+            "allulose": {
+              "type": "number",
+              "description": "A rare sugar with minimal caloric content, used as a sugar alternative in low-carb and keto diets (mg)."
+            },
+            "maltitol": {
+              "type": "number",
+              "description": "A sugar alcohol used in sugar-free products, has a similar taste to sugar but may cause digestive discomfort (mg)."
+            }
+          },
+          "additionalProperties": false
+        },
+        "AdditivesAndOthers": {
+          "type": "object",
+          "required": [
+            "sodium_benzoate",
+            "potassium_sorbate",
+            "calcium_propionate",
+            "tartrazine",
+            "allura_red_ac"
+          ],
+          "properties": {
+            "sodium_benzoate": {
+              "type": "number",
+              "description": "A preservative used to prevent spoilage from microorganisms, commonly found in acidic foods and beverages (mg)."
+            },
+            "potassium_sorbate": {
+              "type": "number",
+              "description": "A common preservative that inhibits mold and yeast growth in foods, wines, and personal care products (mg)."
+            },
+            "calcium_propionate": {
+              "type": "number",
+              "description": "A mold inhibitor often added to baked goods and dairy products to extend shelf life (mg)."
+            },
+            "tartrazine": {
+              "type": "number",
+              "description": "A synthetic lemon yellow dye used in processed foods and drinks, also known as E102 (mg)."
+            },
+            "allura_red_ac": {
+              "type": "number",
+              "description": "A red azo dye commonly used in snacks, soft drinks, and candies; also known as Red 40 (mg)."
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  {
+  "name": "log_preference",
+  "description": "Log one or more recognized high-confidence user preferences, constraints, or goals extracted from a user message or pattern across domains like nutrition, activity, schedule, etc",
+  "strict": false,
+  "parameters": {
+    "type": "object",
+    "required": [
+      "date",
+      "time",
+      "category",
+      "type",
+      "item",
+      "confidence",
+      "source"
+    ],
+    "properties": {
+      "date": {
+        "type": "string",
+        "format": "date",
+        "description": "The date when the preference was stated, in YYYY-MM-DD format."
+      },
+      "time": {
+        "type": "string",
+        "description": "The time when the preference was stated (e.g., HH:MM or 'current')."
+      },
+      "category": {
+        "type": "string",
+        "description": "The high-level category of the preference.",
+        "enum": [
+          "nutrition",
+          "activity",
+          "schedule",
+          "medical",
+          "personality",
+          "environment",
+          "context",
+          "preference",
+          "data_source"
+        ]
+      },
+      "type": {
+        "type": "string",
+        "description": "The type of the preference.",
+        "enum": [
+          "like",
+          "dislike",
+          "avoid",
+          "goal",
+          "limit",
+          "condition",
+          "tendency",
+          "baseline",
+          "pattern",
+          "preference"
+        ]
+      },
+      "item": {
+        "type": "string",
+        "description": "The content or description of the preference in natural language."
+      },
+      "confidence": {
+        "type": "string",
+        "enum": [
+          "high"
+        ],
+        "description": "Confidence level in the extraction (only 'high' is allowed)."
+      },
+      "source": {
+        "type": "string",
+        "enum": [
+          "user_statement"
+        ],
+        "description": "Where the preference was derived from (always 'user_statement')."
+      }
+    }
+  }
+  }
+]
