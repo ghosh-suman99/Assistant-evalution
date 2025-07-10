@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { config } from "./config.js";
-import fs from "fs";
+import fs from "fs/promises";
+import functions from "../functions.json" with { type: "json" };
 
 class OpenAIClient {
   constructor() {
@@ -13,6 +14,45 @@ class OpenAIClient {
     const thread = await this.client.beta.threads.create();
     return thread.id;
   }
+
+  async findOrCreateAssistant(files = []) {
+    // Create an assistant if it doesn't exist
+    try {
+      const assistant = await this.client.beta.assistants.retrieve(
+        config.openai.assistantId
+      );
+      return assistant.id;
+    } catch (error) {
+      if (error.status === 404) {
+        console.log("Creating new assistant...");
+        const vectorStore = await this.client.vectorStores.create({
+          name: "ottavia-assistant",
+          metadata: {
+            purpose: "assistants",
+          },
+        });
+        for (const file of files) {
+          const fileId = await this.uploadFile(file);
+          await this.client.vectorStores.files.create(vectorStore.id, {
+            file_id: fileId,
+          });
+        }
+        const prompt = await fs.readFile("./system_instructions.txt", "utf8");
+        const assistant = await this.client.beta.assistants.create({
+          name: "Ottavia Assistant",
+          instructions: prompt,
+          model: "gpt-4o",
+          temperature: 0.2,
+          tools: [{ type: "file_search" }, { type: 'function', function: functions[0] }, {  type: 'function', function: functions[1] }],
+        });
+        this.assistantId = assistant.id;
+        config.openai.assistantId = assistant.id;
+        return assistant.id;
+      } else {
+        throw new Error(`Failed to retrieve or create assistant: ${error.message}`);
+      }
+    }
+  }     
 
   async addMessage(threadId, content, fileIds = []) {
     // For OpenAI API v5, use 'attachments' instead of 'file_ids'

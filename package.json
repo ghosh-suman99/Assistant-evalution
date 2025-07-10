@@ -8,7 +8,7 @@
     "start": "node src/index.js",
     "evaluate": "node src/evaluator.js",
     "mock-data": "node -e \"import('./src/mock-data-generator.js').then(m => new m.default().generateMockData())\"",
-    "dev": "node --watch src/index.js",
+    "dev": "dotenv -e .env -- node --watch src/index.js",
     "test": "node --test src/__tests__/*.test.js",
     "test:runner": "node src/test-runner.js",
     "eval-and-view": "dotenv -e .env -- promptfoo eval && promptfoo view"

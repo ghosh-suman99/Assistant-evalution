@@ -16,13 +16,16 @@ class AssistantEvaluator {
     console.log(chalk.blue("🚀 Starting Ottavia Assistant Evaluation"));
 
     // Generate mock data
-    await this.mockDataGenerator.generateMockData();
+    await this.mockDataGenerator.generateMockData(testCases);
+    await this.client.findOrCreateAssistant();
 
     // Run test cases
     for (const testCase of testCases) {
       console.log(chalk.yellow(`\n📝 Running test: ${testCase.id}`));
 
       try {
+        // await this.createThreadAndUploadFiles();
+        
         const result = await this.evaluateTestCase(testCase);
         this.results.push(result);
 
@@ -65,24 +68,41 @@ class AssistantEvaluator {
     console.log(chalk.green("\n🎉 Evaluation completed!"));
   }
 
+
+  async createThreadAndUploadFiles(testCase) {
+    // Create new thread
+    const threadId = await this.client.createThread();
+    const fileIds = [];
+    for (const fileName of testCase.mockDataFiles || []) {
+          const filePath = path.join("./data/mock-health-data/", fileName);
+          if (await fs.pathExists(filePath)) {
+            const fileId = await this.client.uploadFile(filePath);
+            if (fileId) {
+              fileIds.push(fileId);
+            }
+          }
+    }
+
+  }
+
   async evaluateTestCase(testCase) {
     // Create new thread
     const threadId = await this.client.createThread();
 
     // Upload mock data files if needed
-    const fileIds = [];
-    for (const fileName of testCase.mockDataFiles || []) {
-      const filePath = path.join("./data/mock-health-data/", fileName);
-      if (await fs.pathExists(filePath)) {
-        const fileId = await this.client.uploadFile(filePath);
-        if (fileId) {
-          fileIds.push(fileId);
-        }
-      }
-    }
+    // const fileIds = [];
+    // for (const fileName of testCase.mockDataFiles || []) {
+    //   const filePath = path.join("./data/mock-health-data/", fileName);
+    //   if (await fs.pathExists(filePath)) {
+    //     const fileId = await this.client.uploadFile(filePath);
+    //     if (fileId) {
+    //       fileIds.push(fileId);
+    //     }
+    //   }
+    // }
 
     // Add message and run assistant
-    await this.client.addMessage(threadId, testCase.prompt, fileIds);
+    await this.client.addMessage(threadId, testCase.prompt, testCase.files || []);
     const response = await this.client.runAssistant(threadId);
 
     // Evaluate response
